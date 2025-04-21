@@ -1,14 +1,22 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import simplepbr
+from direct.showbase.ShowBase import ShowBase
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+class Demo(ShowBase):
+    def __init__(self):
+        ShowBase.__init__(self)
+
+        self.loadModels()
+
+    def loadModels(self):
+        simplepbr.init()
+
+        self.characters = loader.loadModel("Assets/Characters/characters.gltf")
+        self.characters.reparentTo(render)
+
+        self.enviroment = loader.loadModel("Assets/Enviroment/scene.gltf")
+        self.enviroment.reparentTo(render)
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+test = Demo()
+test.run()
