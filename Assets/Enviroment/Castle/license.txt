@@ -1,0 +1,11 @@
+Model Information:
+* title:	Lowpoly castle
+* source:	https://sketchfab.com/3d-models/lowpoly-castle-1edabfcdf6594a9898e6f7d0f8b113db
+* author:	korteh (https://sketchfab.com/korteh)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Lowpoly castle" (https://sketchfab.com/3d-models/lowpoly-castle-1edabfcdf6594a9898e6f7d0f8b113db) by korteh (https://sketchfab.com/korteh) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
