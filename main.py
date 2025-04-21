@@ -2,6 +2,7 @@ import simplepbr
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import AmbientLight, PointLight, VBase4, VBase3
 
+
 class Demo(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
@@ -9,6 +10,7 @@ class Demo(ShowBase):
         self.createlight()
         self.cameracontrol()
         self.setskybox()
+
         simplepbr.init()
 
     def cameracontrol(self):
@@ -46,7 +48,9 @@ class Demo(ShowBase):
         self.skybox.reparentTo(render)
         self.skybox.setShaderOff()
         self.skybox.setBin('background', 0)
-        self.skybox.setDepthWrite(0)
-        self.skybox.setLightOff()
+        self.skybox.setDepthWrite(1)
+        self.skybox.setLightOff(0)
+
+
 test = Demo()
 test.run()
