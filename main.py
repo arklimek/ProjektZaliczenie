@@ -1,16 +1,44 @@
 import simplepbr
+
 from direct.gui.OnscreenImage import *
+from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import (AmbientLight, PointLight, VBase4, VBase3,
-                          TextureStage, Fog, TransparencyAttrib, WindowProperties)
+
 from pandac.PandaModules import *
 
 ConfigVariableBool("fullscreen", 0).setValue(1)
 
+load_prc_file("myConfig.prc")
 
 class Demo(ShowBase):
+
+    def loadingscreen(self, state):
+        if state:
+            if not hasattr(self, 'loadingScreenNode'):
+                quad = CardMaker("loading_screen")
+                quad.setFrameFullscreenQuad()
+
+                self.loadingScreenNode = self.render2d.attachNewNode(quad.generate())
+                self.loadingScreenNode.setTexture(loader.loadTexture('Assets/Hud/2.jpg'))
+
+                self.loadingText = OnscreenText("DEMO", 2, fg=(1, 1, 1, 1), pos=(0, 0), align=TextNode.ACenter,
+                                                scale=.7, mayChange=1)
+
+            for a in range(4):
+                self.graphicsEngine.renderFrame()
+
+        else:
+            if hasattr(self, 'loadingScreenNode'):
+                self.loadingScreenNode.removeNode()
+                self.loadingText.removeNode()
+
+                del self.loadingScreenNode
+                del self.loadingText
+
     def __init__(self):
         ShowBase.__init__(self)
+        self.loadingscreen(True)
+
         self.loadModels()
         self.createlight()
         self.cameracontrol()
@@ -18,6 +46,8 @@ class Demo(ShowBase):
         self.setskybox()
         self.setfog()
         self.createGUI()
+
+        self.loadingscreen(False)
 
         properties = WindowProperties()
 
@@ -47,6 +77,11 @@ class Demo(ShowBase):
         self.characters = loader.loadModel("Assets/Characters/1/scene.gltf")
         self.characters.setScale(1, 1, 1)
         self.characters.reparentTo(render)
+
+        # my_actor = Actor("Assets/Characters/1/scene.gltf")
+        # anim_names = my_actor.get_anim_names()
+        # my_actor.reparentTo(render)
+        # my_actor.play(anim_names)
 
         self.enviroment = loader.loadModel("Assets/Enviroment/City/scene.gltf")
         self.enviroment.reparentTo(render)
