@@ -1,6 +1,12 @@
 import simplepbr
+from direct.gui.OnscreenImage import *
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import AmbientLight, PointLight, VBase4, VBase3, TextureStage, Fog
+from panda3d.core import (AmbientLight, PointLight, VBase4, VBase3,
+                          TextureStage, Fog, TransparencyAttrib, WindowProperties)
+from pandac.PandaModules import *
+
+ConfigVariableBool("fullscreen", 0).setValue(1)
+
 
 class Demo(ShowBase):
     def __init__(self):
@@ -11,6 +17,9 @@ class Demo(ShowBase):
         self.swaptextures()
         self.setskybox()
         self.setfog()
+        self.createGUI()
+
+        properties = WindowProperties()
 
         simplepbr.init(
             use_normal_maps=True,
@@ -24,6 +33,15 @@ class Demo(ShowBase):
         self.cam.set_hpr(0, 0, 0)
         self.cam.set_pos(0., -2., 2)
 
+    def createGUI(self):
+        image = OnscreenImage(
+            parent=base.a2dBottomCenter,
+            image='Assets/Hud/3.png',
+            pos=(0, 0, 0.4),
+            scale=(1, 1, 0.4),
+            hpr=(0, 0, 0)
+        )
+        image.setTransparency(TransparencyAttrib.MAlpha)
 
     def loadModels(self):
         self.characters = loader.loadModel("Assets/Characters/1/scene.gltf")
@@ -42,8 +60,8 @@ class Demo(ShowBase):
         self.point = PointLight('point')
         self.point.setPoint(VBase3(0, 0, 0))
 
-        self.point.setAttenuation(10)
-        self.point.setMaxDistance(10)
+        self.point.setAttenuation(100)
+        self.point.setMaxDistance(100)
 
         self.point.setColor(VBase4(1, 1.5, 1, 0))
         self.point = render.attachNewNode(self.point)
@@ -68,7 +86,7 @@ class Demo(ShowBase):
     def swaptextures(self):
         ts = TextureStage("1")
         ts.setTexcoordName("0")
-        self.characters.setTexture(ts, self.loader.loadTexture("Assets/Characters/1/textures/2.png"))
+        self.characters.setTexture(ts, self.loader.loadTexture("Assets/Characters/1/textures/1.png"))
 
 test = Demo()
 test.run()
