@@ -1,7 +1,6 @@
 import simplepbr
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import AmbientLight, PointLight, VBase4, VBase3
-
+from panda3d.core import AmbientLight, PointLight, VBase4, VBase3, TextureStage, Fog
 
 class Demo(ShowBase):
     def __init__(self):
@@ -9,17 +8,25 @@ class Demo(ShowBase):
         self.loadModels()
         self.createlight()
         self.cameracontrol()
+        self.swaptextures()
         self.setskybox()
+        self.setfog()
 
-        simplepbr.init()
+        simplepbr.init(
+            use_normal_maps=True,
+            enable_fog=True,
+            enable_shadows=True,
+            max_lights=2
+        )
 
     def cameracontrol(self):
         self.camLens.set_fov(90)
         self.cam.set_hpr(0, 0, 0)
         self.cam.set_pos(0., -2., 2)
 
+
     def loadModels(self):
-        self.characters = loader.loadModel("Assets/Characters/scene.gltf")
+        self.characters = loader.loadModel("Assets/Characters/1/scene.gltf")
         self.characters.setScale(1, 1, 1)
         self.characters.reparentTo(render)
 
@@ -42,6 +49,13 @@ class Demo(ShowBase):
         self.point = render.attachNewNode(self.point)
         render.setLight(self.point)
 
+    def setfog(self):
+        fog = Fog("fog")
+        fog.set_mode(Fog.MExponentialSquared)
+        fog.set_color(0.05, 0.06, 0.05)
+        fog.set_exp_density(0.09)
+        render.set_fog(fog)
+
     def setskybox(self):
         self.skybox = loader.loadModel("Assets/Enviroment/City/skybox/scene.gltf")
         self.skybox.setScale(2000)
@@ -51,6 +65,10 @@ class Demo(ShowBase):
         self.skybox.setDepthWrite(1)
         self.skybox.setLightOff(0)
 
+    def swaptextures(self):
+        ts = TextureStage("1")
+        ts.setTexcoordName("0")
+        self.characters.setTexture(ts, self.loader.loadTexture("Assets/Characters/1/textures/2.png"))
 
 test = Demo()
 test.run()
