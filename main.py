@@ -1,17 +1,34 @@
-import simplepbr
+import simplepbr, os
 
 from direct.gui.OnscreenImage import *
 from direct.gui.OnscreenText import OnscreenText
+from direct.gui.DirectGui import *
 from direct.showbase.ShowBase import ShowBase
-
+from panda3d.core import *
 from pandac.PandaModules import *
 
 #ConfigVariableBool("fullscreen", 0).setValue(1)
 
 load_prc_file("myConfig.prc")
 
+index_texture = 1
+index_character = 1
+index_enviroment = 1
 
 class Demo(ShowBase):
+    def checkfile(directory, filename):
+        full_path = os.path.join(directory, filename)
+
+        if not os.path.isdir(directory):
+            print(f"Directory {directory} doesn't exist")
+            return False
+
+        if os.path.isfile(full_path):
+            print(f"Found {filename} in {directory}")
+            return True
+        else:
+            print(f"File {filename} not found")
+            return False
 
     def loadingscreen(self, state):
         if state:
@@ -43,14 +60,11 @@ class Demo(ShowBase):
         self.loadModels()
         self.createlight()
         self.cameracontrol()
-        self.swaptextures()
-        self.setskybox()
-        self.setfog()
+        #self.setskybox()
+        #self.setfog()
         self.createGUI()
 
         self.loadingscreen(False)
-
-        properties = WindowProperties()
 
         simplepbr.init(
             use_normal_maps=True,
@@ -64,34 +78,16 @@ class Demo(ShowBase):
         self.cam.set_hpr(0, 0, 0)
         self.cam.set_pos(0., -2., 2)
 
-    def createGUI(self):
-        image = OnscreenImage(
-            parent=base.a2dBottomCenter,
-            image='Assets/Hud/3.png',
-            pos=(0, 0, 0.4),
-            scale=(1, 1, 0.4),
-            hpr=(0, 0, 0)
-        )
-        image.setTransparency(TransparencyAttrib.MAlpha)
-
     def loadModels(self):
-        self.characters = loader.loadModel("Assets/Characters/1/scene.gltf")
+        global index_character, index_enviroment
+
+        self.characters = loader.loadModel(f"Assets/Characters/{index_character}/scene.gltf")
         self.characters.reparentTo(render)
         self.characters.setScale(1, 1, 1)
         self.characters.setPos(-2, 3, 0)
         self.characters.setHpr(475, 0, 0)
 
-        # my_actor = Actor("Assets/Characters/1/scene.gltf")
-        # anim_names = my_actor.get_anim_names()
-        # my_actor.reparentTo(render)
-        # my_actor.play(anim_names)
-
-        # my_actor = Actor("Assets/Characters/1/scene.gltf")
-        # anim_names = my_actor.get_anim_names()
-        # my_actor.reparentTo(render)
-        # my_actor.play(anim_names)
-
-        self.enviroment = loader.loadModel("Assets/Enviroment/City/scene.gltf")
+        self.enviroment = loader.loadModel(f"Assets/Enviroment/{index_enviroment}/scene.gltf")
         self.enviroment.reparentTo(render)
 
     def createlight(self):
@@ -118,7 +114,7 @@ class Demo(ShowBase):
         render.set_fog(fog)
 
     def setskybox(self):
-        self.skybox = loader.loadModel("Assets/Enviroment/City/skybox/scene.gltf")
+        self.skybox = loader.loadModel("Assets/Enviroment/1/skybox/scene.gltf")
         self.skybox.setScale(2000)
         self.skybox.reparentTo(render)
         self.skybox.setShaderOff()
@@ -127,9 +123,72 @@ class Demo(ShowBase):
         self.skybox.setLightOff(0)
 
     def swaptextures(self):
-        ts = TextureStage("1")
+        global index_texture, index_character
+
+        #tex = TexturePool.getTexture(f"Assets/Characters/{index_character}/textures/swap/{index_texture}.png")
+        #self.characters = TexturePool.releaseTexture(tex)
+
+        index_texture += 1
+
+        ts = TextureStage(f"{index_texture}")
         ts.setTexcoordName("0")
-        self.characters.setTexture(ts, self.loader.loadTexture("Assets/Characters/1/textures/1.png"))
+
+        directory = f"Assets/Characters/{index_character}/textures/swap/{index_texture}.png"
+
+        if os.path.exists(directory) == True:
+            self.characters.setTexture(ts, self.loader.loadTexture(f"Assets/Characters/{index_character}/textures/swap/{index_texture}.png"))
+
+        else:
+            index_texture = 1
+            self.characters.setTexture(ts, self.loader.loadTexture(f"Assets/Characters/{index_character}/textures/swap/{index_texture}.png"))
+
+
+    def swapenviroment(self):
+        global index_enviroment
+
+        self.enviroment.removeNode()
+        self.enviroment = loader.unloadModel(f"Assets/Enviroment/{self.index_enviroment}/scene.gltf")
+
+        self.index_enviroment += 1
+
+        directory = f"Assets/Enviroment/{self.index_enviroment}"
+
+        if os.path.exists(directory):
+            self.enviroment = loader.loadModel(f"Assets/Enviroment/{self.index_enviroment}/scene.gltf")
+            self.enviroment.reparentTo(render)
+        else:
+            self.index_enviroment = 1
+            self.enviroment = loader.loadModel(f"Assets/Enviroment/{self.index_enviroment}/scene.gltf")
+            self.enviroment.reparentTo(render)
+
+
+    def createGUI(self):
+
+        image = OnscreenImage(
+            parent=self.a2dBottomCenter,
+            image='Assets/Hud/3.png',
+            pos=(0, 0, 0.4),
+            scale=(1, 1, 0.4),
+            hpr=(0, 0, 0)
+        )
+
+        image.setTransparency(TransparencyAttrib.MAlpha)
+
+        self.kolejna_tekstura = DirectButton(
+            text="|>",
+            scale=0.05,
+            command=lambda: self.swaptextures(),
+            pos=(0.1, 0, -0.9)
+        )
+
+        self.poprzednia_tekstura = DirectButton(
+            text="<|",
+            scale=0.05,
+            command=lambda: self.swapenviroment(),
+            pos=(-0.1, 0, -0.9)
+        )
+
+
 
 test = Demo()
 test.run()
