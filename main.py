@@ -85,6 +85,11 @@ class Demo(ShowBase):
         # my_actor.reparentTo(render)
         # my_actor.play(anim_names)
 
+        # my_actor = Actor("Assets/Characters/1/scene.gltf")
+        # anim_names = my_actor.get_anim_names()
+        # my_actor.reparentTo(render)
+        # my_actor.play(anim_names)
+
         self.enviroment = loader.loadModel("Assets/Enviroment/City/scene.gltf")
         self.enviroment.reparentTo(render)
 
