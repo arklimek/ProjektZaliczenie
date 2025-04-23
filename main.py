@@ -10,6 +10,7 @@ from pandac.PandaModules import *
 
 load_prc_file("myConfig.prc")
 
+
 class Demo(ShowBase):
 
     def loadingscreen(self, state):
