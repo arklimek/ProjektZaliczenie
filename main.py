@@ -1,17 +1,14 @@
-import simplepbr, os
-
-from direct.gui.OnscreenImage import *
-from direct.gui.OnscreenText import OnscreenText
+import os
+import simplepbr
 from direct.gui.DirectGui import *
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import *
 from pandac.PandaModules import *
 
 #ConfigVariableBool("fullscreen", 0).setValue(1)
 
 load_prc_file("myConfig.prc")
 
-index_texture = 1
+index_character_folder = 1
 index_character = 1
 index_enviroment = 1
 
@@ -60,8 +57,8 @@ class Demo(ShowBase):
         self.loadModels()
         self.createlight()
         self.cameracontrol()
-        #self.setskybox()
-        #self.setfog()
+        self.setskybox()
+        self.setfog()
         self.createGUI()
 
         self.loadingscreen(False)
@@ -79,9 +76,9 @@ class Demo(ShowBase):
         self.cam.set_pos(0., -2., 2)
 
     def loadModels(self):
-        global index_character, index_enviroment
+        global index_character, index_enviroment, index_character_folder
 
-        self.characters = loader.loadModel(f"Assets/Characters/{index_character}/scene.gltf")
+        self.characters = loader.loadModel(f"Assets/Characters/{index_character_folder}/{index_character}.gltf")
         self.characters.reparentTo(render)
         self.characters.setScale(1, 1, 1)
         self.characters.setPos(-2, 3, 0)
@@ -122,44 +119,89 @@ class Demo(ShowBase):
         self.skybox.setDepthWrite(1)
         self.skybox.setLightOff(0)
 
-    def swaptextures(self):
-        global index_texture, index_character
+    def swapcharacter(self, direction=1):
+        global index_character
 
-        #tex = TexturePool.getTexture(f"Assets/Characters/{index_character}/textures/swap/{index_texture}.png")
-        #self.characters = TexturePool.releaseTexture(tex)
+        max_models = 50
+        folder = index_character_folder
 
-        index_texture += 1
+        for _ in range(max_models):
+            index_character += direction
 
-        ts = TextureStage(f"{index_texture}")
-        ts.setTexcoordName("0")
+            if index_character < 1:
+                index_character = max_models
+            if index_character > max_models:
+                index_character = 1
 
-        directory = f"Assets/Characters/{index_character}/textures/swap/{index_texture}.png"
-
-        if os.path.exists(directory) == True:
-            self.characters.setTexture(ts, self.loader.loadTexture(f"Assets/Characters/{index_character}/textures/swap/{index_texture}.png"))
-
+            path = f"Assets/Characters/{folder}/{index_character}.gltf"
+            if os.path.exists(path):
+                break
         else:
-            index_texture = 1
-            self.characters.setTexture(ts, self.loader.loadTexture(f"Assets/Characters/{index_character}/textures/swap/{index_texture}.png"))
+            return
 
+        if hasattr(self, 'characters') and self.characters:
+            self.characters.removeNode()
 
-    def swapenviroment(self):
+        self.characters = loader.loadModel(path)
+        self.characters.reparentTo(render)
+        self.characters.setScale(1, 1, 1)
+        self.characters.setPos(-2, 3, 0)
+        self.characters.setHpr(475, 0, 0)
+
+    def swapenviroment(self, direction=1):
         global index_enviroment
 
-        self.enviroment.removeNode()
-        self.enviroment = loader.unloadModel(f"Assets/Enviroment/{self.index_enviroment}/scene.gltf")
+        max_envs = 50
 
-        self.index_enviroment += 1
+        for _ in range(max_envs):
+            index_enviroment += direction
 
-        directory = f"Assets/Enviroment/{self.index_enviroment}"
+            if index_enviroment < 1:
+                index_enviroment = max_envs
+            if index_enviroment > max_envs:
+                index_enviroment = 1
 
-        if os.path.exists(directory):
-            self.enviroment = loader.loadModel(f"Assets/Enviroment/{self.index_enviroment}/scene.gltf")
-            self.enviroment.reparentTo(render)
+            path = f"Assets/Enviroment/{index_enviroment}/scene.gltf"
+            if os.path.exists(path):
+                break
         else:
-            self.index_enviroment = 1
-            self.enviroment = loader.loadModel(f"Assets/Enviroment/{self.index_enviroment}/scene.gltf")
-            self.enviroment.reparentTo(render)
+            return
+
+        if hasattr(self, 'enviroment') and self.enviroment:
+            self.enviroment.removeNode()
+
+        self.enviroment = loader.loadModel(path)
+        self.enviroment.reparentTo(render)
+
+    def swapcharacterfolder(self, direction=1):
+        global index_character_folder, index_character
+
+        max_folders = 50
+
+        for _ in range(max_folders):
+            index_character_folder += direction
+
+            if index_character_folder < 1:
+                index_character_folder = max_folders
+            if index_character_folder > max_folders:
+                index_character_folder = 1
+
+            index_character = 1
+            path = f"Assets/Characters/{index_character_folder}/{index_character}.gltf"
+
+            if os.path.exists(path):
+                break
+        else:
+            return
+
+        if hasattr(self, 'characters') and self.characters:
+            self.characters.removeNode()
+
+        self.characters = loader.loadModel(path)
+        self.characters.reparentTo(render)
+        self.characters.setScale(1, 1, 1)
+        self.characters.setPos(-2, 3, 0)
+        self.characters.setHpr(475, 0, 0)
 
 
     def createGUI(self):
@@ -174,20 +216,65 @@ class Demo(ShowBase):
 
         image.setTransparency(TransparencyAttrib.MAlpha)
 
-        self.kolejna_tekstura = DirectButton(
-            text="|>",
+        self.typ_postaci_prev = DirectButton(
+            text_bg=(0, 0, 0, 0),
+            text_fg=(1, 1, 1, 1),
+            frameColor=(0, 0, 0, 0),
+            text=("<< TYP POSTACI"),
+            text0_font=loader.loadFont('Assets/Hud/Roboto.ttf'),
             scale=0.05,
-            command=lambda: self.swaptextures(),
-            pos=(0.1, 0, -0.9)
+            command=lambda: self.swapcharacterfolder(-1),
+            pos=(-0.5, 0, -0.9)
         )
 
-        self.poprzednia_tekstura = DirectButton(
-            text="<|",
+        self.typ_postaci_next = DirectButton(
+            text_bg=(0, 0, 0, 0),
+            text_fg=(1, 1, 1, 1),
+            frameColor=(0, 0, 0, 0),
+            text=">> TYP POSTACI",
             scale=0.05,
-            command=lambda: self.swapenviroment(),
-            pos=(-0.1, 0, -0.9)
+            command=lambda: self.swapcharacterfolder(1),
+            pos=(0.5, 0, -0.9)
+        )
+        self.poprzednia_postac = DirectButton(
+            text_bg=(0, 0, 0, 0),
+            text_fg=(1, 1, 1, 1),
+            frameColor=(0, 0, 0, 0),
+            text="<< POSTAĆ",
+            scale=0.05,
+            command=lambda: self.swapcharacter(-1),
+            pos=(-0.3, 0, -0.9)
         )
 
+        self.kolejna_postac = DirectButton(
+            text_bg=(0, 0, 0, 0),
+            text_fg=(1, 1, 1, 1),
+            frameColor=(0, 0, 0, 0),
+            text=">> POSTAĆ",
+            scale=0.05,
+            command=lambda: self.swapcharacter(1),
+            pos=(0.3, 0, -0.9)
+        )
+
+        self.poprzednia_mapa = DirectButton(
+            text_bg=(0, 0, 0, 0),
+            text_fg=(1, 1, 1, 1),
+            frameColor=(0, 0, 0, 0),
+            text="<< MAPA",
+            scale=0.05,
+            command=lambda: self.swapenviroment(-1),
+            pos=(-0.1, 0, -0.8)
+        )
+
+        self.kolejna_mapa = DirectButton(
+            text_bg=(0, 0, 0, 0),
+            text_fg=(1, 1, 1, 1),
+            frameColor=(0, 0, 0, 0),
+            text=">> MAPA",
+            scale=0.05,
+            command=lambda: self.swapenviroment(1),
+            pos=(0.1, 0, -0.8)
+        )
 
 
 test = Demo()
