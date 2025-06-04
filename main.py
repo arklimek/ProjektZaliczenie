@@ -1,4 +1,5 @@
 import os
+
 import simplepbr
 from direct.gui.DirectGui import *
 from direct.showbase.ShowBase import ShowBase
@@ -36,8 +37,9 @@ class Demo(ShowBase):
                 self.loadingScreenNode = self.render2d.attachNewNode(quad.generate())
                 self.loadingScreenNode.setTexture(loader.loadTexture('Assets/Hud/2.jpg'))
 
-                self.loadingText = OnscreenText("DEMO", 2, fg=(1, 1, 1, 1), pos=(0, 0), align=TextNode.ACenter,
-                                                scale=.7, mayChange=1)
+                self.loadingText = OnscreenText("Arkadiusz Klimek \n\n Antoni Knapczyk", 2, fg=(1, 1, 1, 1), pos=(0, 0),
+                                                align=TextNode.ACenter,
+                                                scale=.15, mayChange=1)
 
             for a in range(4):
                 self.graphicsEngine.renderFrame()

@@ -1,5 +1,7 @@
-show-frame-rate-meter #t
-sync-video #f
+show-frame-rate-meter #f
+sync-video #t
+fullscreen #f
+text-default-font
 
 #ifdef _WIN32
 extern "C" {

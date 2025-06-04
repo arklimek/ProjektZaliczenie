@@ -1,0 +1,11 @@
+Model Information:
+* title:	PS1 game character
+* source:	https://sketchfab.com/3d-models/ps1-game-character-dde6385773414aab90a4d59e6f99bc42
+* author:	DeBeeL (https://sketchfab.com/DeBeeL)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "PS1 game character" (https://sketchfab.com/3d-models/ps1-game-character-dde6385773414aab90a4d59e6f99bc42) by DeBeeL (https://sketchfab.com/DeBeeL) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
