@@ -4,11 +4,10 @@ import simplepbr
 from direct.gui.DirectGui import *
 from direct.showbase.ShowBase import ShowBase
 from pandac.PandaModules import *
-from panda3d.core import PointLight, VBase4, WindowProperties
-from direct.filter.CommonFilters import CommonFilters
+from panda3d.core import VBase4, NodePath
 
 # CONFIG
-ConfigVariableBool("fullscreen", 0).setValue(1)
+# ConfigVariableBool("fullscreen", 0).setValue(1)
 load_prc_file("myConfig.prc")
 
 #ZMIENNE
@@ -89,7 +88,7 @@ class Demo(ShowBase):
             use_normal_maps=True,
             enable_fog=True,
             enable_shadows=True,
-            max_lights=2,
+            max_lights=1,
         )
 
         self.myMusic = self.loader.loadSfx('Assets/Audio/1.mp3')
@@ -146,12 +145,12 @@ class Demo(ShowBase):
 
     def setskybox(self):
         self.skybox = loader.loadModel("Assets/Enviroment/1/skybox/scene.gltf")
-        self.skybox.setScale(2000)
+        self.skybox.setScale(1000)
         self.skybox.reparentTo(render)
         self.skybox.setShaderOff()
         self.skybox.setBin('background', 0)
         self.skybox.setDepthWrite(1)
-        self.skybox.setLightOff(0)
+        self.skybox.setLightOff(1)
 
     # LOADERY
     def loadModels(self):
@@ -217,6 +216,7 @@ class Demo(ShowBase):
         if hasattr(self, 'enviroment') and self.enviroment:
             self.enviroment.removeNode()
 
+
         self.enviroment = loader.loadModel(path)
         self.enviroment.reparentTo(render)
 
@@ -243,6 +243,7 @@ class Demo(ShowBase):
 
         if hasattr(self, 'characters') and self.characters:
             self.characters.removeNode()
+
 
         self.characters = loader.loadModel(path)
         self.characters.reparentTo(render)

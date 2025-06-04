@@ -1,11 +1,10 @@
 show-frame-rate-meter #t
 sync-video #f
-fullscreen #t
 text-default-font Assets/Hud/SpaceMono.ttf
 text-encoding utf8
 threading-model Cull/Draw
 hardware-animated-vertices true
-basic-shaders-only false
+basic-shaders-only true
 gl-immutable-texture-storage true
 preload-simple-textures 1
 text-anisotropic-degree 2
