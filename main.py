@@ -39,9 +39,12 @@ class Demo(ShowBase):
                 self.loadingScreenNode = self.render2d.attachNewNode(quad.generate())
                 self.loadingScreenNode.setTexture(loader.loadTexture('Assets/Hud/2.jpg'))
 
-                self.loadingText = OnscreenText("Arkadiusz Klimek \n\n Antoni Knapczyk", 2, fg=(1, 1, 1, 1), pos=(0, 0),
+                self.loadingText = OnscreenText("Arkadiusz Klimek\nAntoni Knapczyk\n\nAGH 2025",
+                                                2,
+                                                fg=(1, 1, 1, 1),
+                                                pos=(0, 0),
                                                 align=TextNode.ACenter,
-                                                scale=.15, mayChange=1)
+                                                scale=0.1)
 
             for a in range(4):
                 self.graphicsEngine.renderFrame()
@@ -57,7 +60,7 @@ class Demo(ShowBase):
     def cameralocation(self):
         self.disableMouse()
 
-        self.camLens.set_fov(65)
+        self.camLens.set_fov(75)
         self.cam.set_hpr(0, -10, 0)
         self.cam.set_pos(-0.5, -1.5, 1.75)
 
@@ -131,25 +134,17 @@ class Demo(ShowBase):
 
     def createlight(self):
         self.ambient = AmbientLight('ambient')
+
         self.ambient.setColor(VBase4(0.05, 0.07, 0.05, 1.0))
         self.ambient = render.attachNewNode(self.ambient)
         render.setLight(self.ambient)
 
-        self.point = PointLight('point')
-        self.point.setPoint(VBase3(0, 0, 0))
-
-        self.point.setAttenuation(100)
-        self.point.setMaxDistance(100)
-
-        self.point.setColor(VBase4(1, 1.5, 1, 0))
-        self.point = render.attachNewNode(self.point)
-        render.setLight(self.point)
 
     def setfog(self):
         fog = Fog("fog")
         fog.set_mode(Fog.MExponentialSquared)
         fog.set_color(0.05, 0.06, 0.05)
-        fog.set_exp_density(0.09)
+        fog.set_exp_density(0.07)
         render.set_fog(fog)
 
     def setskybox(self):
@@ -253,14 +248,6 @@ class Demo(ShowBase):
             self.myMusic.play()
 
     def createGUI(self):
-
-        '''image = OnscreenImage(
-            parent=self.a2dBottomCenter,
-            image='Assets/Hud/3.png',
-            pos=(0, 0, 0.4),
-            scale=(1, 1, 0.4),
-            hpr=(0, 0, 0)
-        )'''
 
         self.text_character = OnscreenText(text="CHARACTER", pos=(0.45, -0.15), scale=0, fg=(1, 0, 0, 1),
                                            align=TextNode.ACenter, parent=self.a2dTopLeft)
@@ -377,7 +364,6 @@ class Demo(ShowBase):
         myFrame = DirectFrame(frameColor=(0, 0, 0, 0.2), frameSize=(-10, -0.5, -10, 10), pos=(1.4, 0, 0),
                               parent=self.a2dLeftCenter)
 
-        # self.image.setTransparency(TransparencyAttrib.MAlpha)
         self.poprzednia_mapa.setTransparency(TransparencyAttrib.MAlpha)
         self.kolejna_mapa.setTransparency(TransparencyAttrib.MAlpha)
         self.poprzednia_postac.setTransparency(TransparencyAttrib.MAlpha)
