@@ -1,8 +1,12 @@
-show-frame-rate-meter #f
-sync-video #t
-fullscreen #f
+show-frame-rate-meter #t
+sync-video #f
+fullscreen #t
 text-default-font Assets/Hud/SpaceMono.ttf
 text-encoding utf8
+threading-model Cull/Draw
+hardware-animated-vertices true
+basic-shaders-only false
+gl-immutable-texture-storage true
 
 #ifdef _WIN32
 extern "C" {

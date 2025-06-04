@@ -5,6 +5,7 @@ from direct.gui.DirectGui import *
 from direct.showbase.ShowBase import ShowBase
 from pandac.PandaModules import *
 from panda3d.core import PointLight, VBase4
+from direct.filter.CommonFilters import CommonFilters
 
 ConfigVariableBool("fullscreen", 0).setValue(1)
 
@@ -62,7 +63,7 @@ class Demo(ShowBase):
 
         self.camLens.set_fov(75)
         self.cam.set_hpr(0, -10, 0)
-        self.cam.set_pos(-0.5, -1.5, 1.75)
+        self.cam.set_pos(-0.5, -0.7, 1.5)
 
         self.lastMouseX = 0
         self.accept("mouse1", self.startMouseTask)
@@ -138,7 +139,7 @@ class Demo(ShowBase):
         self.ambient.setColor(VBase4(0.05, 0.07, 0.05, 1.0))
         self.ambient = render.attachNewNode(self.ambient)
         render.setLight(self.ambient)
-
+        render.setShaderAuto()
 
     def setfog(self):
         fog = Fog("fog")
@@ -146,6 +147,7 @@ class Demo(ShowBase):
         fog.set_color(0.05, 0.06, 0.05)
         fog.set_exp_density(0.07)
         render.set_fog(fog)
+        render.setShaderAuto()
 
     def setskybox(self):
         self.skybox = loader.loadModel("Assets/Enviroment/1/skybox/scene.gltf")
@@ -249,7 +251,7 @@ class Demo(ShowBase):
 
     def createGUI(self):
 
-        self.text_character = OnscreenText(text="CHARACTER", pos=(0.45, -0.15), scale=0, fg=(1, 0, 0, 1),
+        self.text_character = OnscreenText(text="CHARACTER", pos=(0.435, -0.2), scale=0.1, fg=(1, 0, 0, 1),
                                            align=TextNode.ACenter, parent=self.a2dTopLeft)
 
         self.text_preset = OnscreenText(text="PRESET", pos=(0.45, -0.5), fg=(1, 1, 1, 1), align=TextNode.ACenter,
@@ -335,7 +337,7 @@ class Demo(ShowBase):
             text=("EXIT"),
             scale=0.05,
             command=lambda: sys.exit(),
-            pos=(-0.4, 0, 0.1),
+            pos=(-0.2, 0, 0.1),
             parent=self.a2dBottomRight
         )
         self.audio = DirectButton(
@@ -361,7 +363,7 @@ class Demo(ShowBase):
             text_fg=(0, 1, 0, 1)
         )
 
-        myFrame = DirectFrame(frameColor=(0, 0, 0, 0.2), frameSize=(-10, -0.5, -10, 10), pos=(1.4, 0, 0),
+        myFrame = DirectFrame(frameColor=(0, 0, 0, 0.35), frameSize=(-10, -0.5, -10, 10), pos=(1.4, 0, 0),
                               parent=self.a2dLeftCenter)
 
         self.poprzednia_mapa.setTransparency(TransparencyAttrib.MAlpha)
