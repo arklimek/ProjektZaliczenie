@@ -4,19 +4,23 @@ import simplepbr
 from direct.gui.DirectGui import *
 from direct.showbase.ShowBase import ShowBase
 from pandac.PandaModules import *
-from panda3d.core import PointLight, VBase4
+from panda3d.core import PointLight, VBase4, WindowProperties
 from direct.filter.CommonFilters import CommonFilters
 
+# CONFIG
 ConfigVariableBool("fullscreen", 0).setValue(1)
-
 load_prc_file("myConfig.prc")
 
+#ZMIENNE
 index_character_folder = 1
 index_character = 1
 index_enviroment = 1
 rotate_character = 0
 
+
 class Demo(ShowBase):
+
+    #PRE
     def checkfile(directory, filename):
         full_path = os.path.join(directory, filename)
 
@@ -69,6 +73,7 @@ class Demo(ShowBase):
         self.accept("mouse1", self.startMouseTask)
         self.accept("mouse1-up", self.stopMouseTask)
 
+    #INIT
     def __init__(self):
         ShowBase.__init__(self)
         self.loadingscreen(True)
@@ -84,13 +89,14 @@ class Demo(ShowBase):
             use_normal_maps=True,
             enable_fog=True,
             enable_shadows=True,
-            max_lights=2
+            max_lights=2,
         )
 
         self.myMusic = self.loader.loadSfx('Assets/Audio/1.mp3')
         self.ambient = self.loader.loadSfx('Assets/Audio/ambient.mp3')
         self.ambient.play()
 
+    #MYSZ
     def startMouseTask(self):
         self.taskMgr.add(self.mouseTask, "mouseTask")
 
@@ -111,6 +117,7 @@ class Demo(ShowBase):
 
         return task.cont
 
+    #SLIDER POSTACI
     def characterrotate(self):
         global rotate_character
         self.characters.setHpr(rotate_character, 0, 0)
@@ -120,19 +127,7 @@ class Demo(ShowBase):
         rotate_character = self.slider['value']
         self.characterrotate()
 
-    def loadModels(self):
-        global index_character, index_enviroment, index_character_folder
-
-        self.characters = loader.loadModel(f"Assets/Characters/{index_character_folder}/{index_character}.gltf")
-        self.characters.reparentTo(render)
-        self.characters.setScale(1, 1, 1)
-        self.characters.setPos(0, 2, 0)
-        self.characters.setHpr(0, 0, 0)
-
-        self.enviroment = loader.loadModel(f"Assets/Enviroment/{index_enviroment}/scene.gltf")
-        self.enviroment.reparentTo(render)
-
-
+    #LIGHT
     def createlight(self):
         self.ambient = AmbientLight('ambient')
 
@@ -157,6 +152,19 @@ class Demo(ShowBase):
         self.skybox.setBin('background', 0)
         self.skybox.setDepthWrite(1)
         self.skybox.setLightOff(0)
+
+    # LOADERY
+    def loadModels(self):
+        global index_character, index_enviroment, index_character_folder
+
+        self.characters = loader.loadModel(f"Assets/Characters/{index_character_folder}/{index_character}.gltf")
+        self.characters.reparentTo(render)
+        self.characters.setScale(1, 1, 1)
+        self.characters.setPos(0, 2, 0)
+        self.characters.setHpr(0, 0, 0)
+
+        self.enviroment = loader.loadModel(f"Assets/Enviroment/{index_enviroment}/scene.gltf")
+        self.enviroment.reparentTo(render)
 
     def swapcharacter(self, direction=1):
         global index_character, rotate_character
@@ -242,6 +250,7 @@ class Demo(ShowBase):
         self.characters.setPos(0, 2, 0)
         self.characters.setHpr(rotate_character, 0, 0)
 
+    #MISC
     def audioplay(self):
         if self.myMusic.status() == AudioSound.PLAYING:
             self.myMusic.stop()
@@ -250,7 +259,6 @@ class Demo(ShowBase):
             self.myMusic.play()
 
     def createGUI(self):
-
         self.text_character = OnscreenText(text="CHARACTER", pos=(0.435, -0.2), scale=0.1, fg=(1, 0, 0, 1),
                                            align=TextNode.ACenter, parent=self.a2dTopLeft)
 

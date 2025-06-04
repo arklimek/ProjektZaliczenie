@@ -7,6 +7,8 @@ threading-model Cull/Draw
 hardware-animated-vertices true
 basic-shaders-only false
 gl-immutable-texture-storage true
+preload-simple-textures 1
+text-anisotropic-degree 2
 
 #ifdef _WIN32
 extern "C" {
