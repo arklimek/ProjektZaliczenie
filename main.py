@@ -83,6 +83,7 @@ class Demo(ShowBase):
         self.setfog()
         self.createGUI()
         self.loadingscreen(False)
+        self.fog_enabled = True
 
         simplepbr.init(
             use_normal_maps=True,
@@ -142,9 +143,10 @@ class Demo(ShowBase):
         fog.set_exp_density(0.07)
         render.set_fog(fog)
         render.setShaderAuto()
+        self.fog_node = fog
 
     def setskybox(self):
-        self.skybox = loader.loadModel("Assets/Enviroment/1/skybox/scene.gltf")
+        self.skybox = loader.loadModel("Assets/Enviroment/1/skybox/scene1.gltf")
         self.skybox.setScale(1000)
         self.skybox.reparentTo(render)
         self.skybox.setShaderOff()
@@ -259,6 +261,13 @@ class Demo(ShowBase):
             self.myMusic.setVolume(0.5)
             self.myMusic.play()
 
+    def toggleFog(self):
+        if self.fog_enabled:
+            render.clearFog()
+        else:
+            render.set_fog(self.fog_node)
+        self.fog_enabled = not self.fog_enabled
+
     def createGUI(self):
         self.text_character = OnscreenText(text="CHARACTER", pos=(0.435, -0.2), scale=0.1, fg=(1, 0, 0, 1),
                                            align=TextNode.ACenter, parent=self.a2dTopLeft)
@@ -269,7 +278,6 @@ class Demo(ShowBase):
             text_bg=(0, 0, 0, 0),
             text_fg=(1, 1, 1, 1),
             frameColor=(0, 0, 0, 0),
-            text="TP",
             scale=0.03,
             command=lambda: self.swapcharacterfolder(-1),
             pos=(0.25, 0, -0.48),
@@ -281,7 +289,6 @@ class Demo(ShowBase):
             text_bg=(0, 0, 0, 0),
             text_fg=(1, 1, 1, 1),
             frameColor=(0, 0, 0, 0),
-            text="TP",
             scale=0.03,
             command=lambda: self.swapcharacterfolder(1),
             pos=(0.65, 0, -0.48),
@@ -295,7 +302,6 @@ class Demo(ShowBase):
             text_bg=(0, 0, 0, 0),
             text_fg=(1, 1, 1, 1),
             frameColor=(0, 0, 0, 0),
-            text="p",
             scale=0.03,
             command=lambda: self.swapcharacter(-1),
             pos=(0.25, 0, -0.98),
@@ -307,7 +313,6 @@ class Demo(ShowBase):
             text_bg=(0, 0, 0, 0),
             text_fg=(1, 1, 1, 1),
             frameColor=(0, 0, 0, 0),
-            text="p",
             scale=0.03,
             command=lambda: self.swapcharacter(1),
             pos=(0.65, 0, -0.98),
@@ -359,6 +364,18 @@ class Demo(ShowBase):
             image="Assets/Audio/play.png",
             parent=self.a2dBottomLeft
         )
+
+        self.fog = DirectButton(
+            text_bg=(0, 0, 0, 0),
+            text_fg=(1, 1, 1, 1),
+            frameColor=(0, 0, 0, 0),
+            scale=0.035,
+            command=self.toggleFog,
+            pos=(0.25, 0, 0.1),
+            image="Assets/Hud/fog.png",
+            parent=self.a2dBottomLeft
+        )
+
         self.slider = DirectSlider(
             range=(0, 720),
             value=rotate_character,
@@ -382,7 +399,8 @@ class Demo(ShowBase):
         self.poprzedni_typ_postaci.setTransparency(TransparencyAttrib.MAlpha)
         self.kolejny_typ_postaci.setTransparency(TransparencyAttrib.MAlpha)
         self.audio.setTransparency(TransparencyAttrib.MAlpha)
+        self.fog.setTransparency(TransparencyAttrib.MAlpha)
 
 
-test = Demo()
-test.run()
+app = Demo()
+app.run()
