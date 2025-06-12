@@ -1,2 +1,0 @@
-[console_scripts]
-panda3d_demo = main:main_entry
