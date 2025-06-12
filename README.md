@@ -4,7 +4,9 @@ PROJEKT NA PRZEDMIOT METODY I TECHNIKI PROGRAMOWANIA
 
 INSTALACJA:
 1. Instalacja wymaganych pakietów
+```
 - pip install panda3d, panda3d-gltf, panda3d-simplepbr
+```
 2. Wypakowanie pliku do dowolnego foleru
 3. Uruchomienie pliku "main.py"
 
