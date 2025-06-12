@@ -7,8 +7,8 @@
 ```
 - pip install panda3d, panda3d-gltf, panda3d-simplepbr
 ```
-2. Wypakowanie pliku do dowolnego foleru
-3. Uruchomienie pliku "main.py"
+2. Wypakuj pliki do dowolnego foleru
+3. Uruchom plik "main.py" (__PyCharm Rekomendowany__)
 
 ## OPIS:
 
