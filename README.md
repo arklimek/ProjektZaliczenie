@@ -1,7 +1,7 @@
 # PROJEKT NA PRZEDMIOT METODY I TECHNIKI PROGRAMOWANIA
 
 ![image](https://github.com/user-attachments/assets/7465d2b9-496a-4a7f-a5a9-01defc888311)
-
+<br/>
 ## INSTALACJA:
 1. Instalacja wymaganych pakietów
 ```
