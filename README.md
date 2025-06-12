@@ -9,7 +9,7 @@
 ```
 2. Wypakuj pliki do dowolnego foleru
 3. Uruchom plik "main.py" (__PyCharm Rekomendowany__)
-
+<br/>
 ## OPIS:
 
 Arkadiusz Klimek i Antoni Knapczyk, IS AGH.
